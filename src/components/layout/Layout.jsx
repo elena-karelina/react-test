@@ -1,11 +1,8 @@
-import { Login } from '../pages/login/login';
-import '../style/style.css'
+import PropTypes from 'prop-types';
+import styles from './layout.module.css';
 
-export const Layout=({children})=>{
-    return(
-        <div className="login-layout">
-            {children}
-        </div>
-    )
+export const Layout = ({ children }) => <div className={styles.login_layout}>{children}</div>;
 
-}
+Layout.propTypes = {
+  children: PropTypes.node.isRequired,
+};
