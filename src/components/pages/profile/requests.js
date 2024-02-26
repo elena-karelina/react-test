@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 export const getData = async (token) => {
   try {
@@ -15,7 +16,8 @@ export const getData = async (token) => {
   }
 };
 
-export const patchData = async (token, phoneNumber, firstName, middleName, lastName, email, city, unavtorise) => {
+export const PatchData = async (token, phoneNumber, firstName, middleName, lastName, email, city) => {
+  const navigate = useNavigate();
   axios
     .patch(
       'https://shift-backend.onrender.com/users/profile',
@@ -43,14 +45,15 @@ export const patchData = async (token, phoneNumber, firstName, middleName, lastN
     .catch((error) => {
       if (error.response && error.response.status === 401) {
         alert(error.message);
-        unavtorise();
+        navigate('/');
       } else {
         alert(error.message);
       }
     });
 };
 
-export const logOut = (unavtorise) => {
+export const LogOut = () => {
+  const navigate = useNavigate();
   localStorage.removeItem('token');
-  unavtorise();
+  navigate('/');
 };

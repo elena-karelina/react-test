@@ -1,21 +1,16 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { NextButton } from './button';
 import { TextTimer } from './textTimer';
 import { GetOtpCode, SignIn } from './requests';
 import styles from './login.module.css';
 
 export const Login = () => {
-  const spanTextPhone = 'номер телефона';
-  const spanTextCode = 'проверочный код';
-  const [currentSpanText, setCurrentSpanText] = useState(spanTextPhone);
   const [showNextButton, setShowNextButton] = useState(true);
   const [showVerificationInput, setShowVerificationInput] = useState(false);
   const [otpCode, setOtpCode] = useState('');
   const [showTextTimer, setShowTextTimer] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState('');
   const [retryDelay, setRetryDelay] = useState(0);
-  const navigate = useNavigate();
 
   const handlePhoneNumberChange = (e) => {
     let newValue = e.target.value;
@@ -34,7 +29,6 @@ export const Login = () => {
     }
     GetOtpCode(phoneNumber, setRetryDelay, setShowTextTimer);
     setShowVerificationInput(true);
-    setCurrentSpanText(spanTextCode);
     setShowNextButton(false);
   };
 
@@ -43,7 +37,7 @@ export const Login = () => {
       return;
     }
 
-    SignIn(phoneNumber, otpCode, () => navigate('/profile'));
+    SignIn(phoneNumber, otpCode);
   };
 
   return (
@@ -54,9 +48,7 @@ export const Login = () => {
           e.preventDefault();
         }}
       >
-        <p>
-          Введите <span>{currentSpanText}</span> для входа в личный кабинет
-        </p>
+        <p>Введите {showNextButton ? 'номер телефона' : 'проверочный код'} для входа в личный кабинет</p>
         <input
           placeholder='Телефон'
           className={`${styles.block} ${styles.input}`}

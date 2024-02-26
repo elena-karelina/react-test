@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getData, patchData } from './requests';
+import { getData, PatchData } from './requests';
 import styles from './profile.module.css';
 
 export const Profile = () => {
@@ -45,8 +45,8 @@ export const Profile = () => {
     <div className={styles.wrapper}>
       <form
         onSubmit={(e) => {
-          e.preventDefault(); // Предотвращаем стандартное поведение отправки формы
-          patchData(token, phoneNumber, firstName, middleName, lastName, email, city, () => navigate('/'));
+          e.preventDefault();
+          PatchData(token, phoneNumber, firstName, middleName, lastName, email, city);
         }}
       >
         <input
@@ -62,9 +62,7 @@ export const Profile = () => {
         <input placeholder='Город' value={city} onChange={(e) => setCity(e.target.value)}></input>
         <button type='submit'>Сохранить</button>
       </form>
-      <button className={styles.logout} onClick={() => navigate('/')}>
-        Выйти
-      </button>
+      <button className={styles.logout}>Выйти</button>
     </div>
   );
 };

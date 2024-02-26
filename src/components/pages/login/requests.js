@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 export const GetOtpCode = (phoneNumber, setRetryDelay, setShowTextTimer) => {
   axios
@@ -16,18 +17,17 @@ export const GetOtpCode = (phoneNumber, setRetryDelay, setShowTextTimer) => {
     });
 };
 
-export const SignIn = (phoneNumber, otpCode, onSuccess) => {
+export const SignIn = (phoneNumber, otpCode) => {
+  const navigate = useNavigate();
   axios
     .post('https://shift-backend.onrender.com/users/signin', {
       phone: phoneNumber,
       code: otpCode,
     })
     .then((response) => {
-      console.log(response);
       const token = response.data.token;
-      console.log(response, token);
       localStorage.setItem('token', token);
-      onSuccess();
+      navigate('/profile');
     })
     .catch((error) => {
       if (error.response) {

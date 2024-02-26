@@ -8,6 +8,7 @@ export const TextTimer = (initValue, phoneNumber, setRetryDelay, setShowTextTime
 
   const onRequestCodeClick = () => {
     setSeconds(initValue);
+    GetOtpCode(phoneNumber, setRetryDelay, setShowTextTimer);
   };
 
   useEffect(() => {
@@ -31,7 +32,6 @@ export const TextTimer = (initValue, phoneNumber, setRetryDelay, setShowTextTime
       <RequestCode
         onClick={() => {
           onRequestCodeClick();
-          GetOtpCode(phoneNumber, setRetryDelay, setShowTextTimer);
         }}
       />
     );
