@@ -1,3 +1,7 @@
+:export {
+  primary: var(--button);
+}
+
 .wrapper {
   display: flex;
   flex-direction: column;
@@ -18,7 +22,7 @@ input {
   font-size: 16px;
 }
 button {
-  background-color: #1975ff;
+  background-color: var(--button);
   color: white;
   border: none;
   border-radius: 16px;

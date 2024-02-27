@@ -5,6 +5,7 @@ import { NextButton } from './button';
 import { TextTimer } from './textTimer';
 import { GetOtpCode, SignIn } from './requests';
 import styles from './login.module.css';
+import '../../style/style.css';
 
 export const Login = () => {
   const [showNextButton, setShowNextButton] = useState(true);
@@ -36,7 +37,7 @@ export const Login = () => {
   };
 
   const handleLoginButtonClick = () => {
-    if (!phoneNumber || !otpCode.trim || otpCode.length != 6) {
+    if (!phoneNumber || !otpCode.trim) {
       return;
     }
 
@@ -49,7 +50,7 @@ export const Login = () => {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          handleSubmit(onSubmit);
+          handleSubmit(onSubmit)(e);
         }}
       >
         <p>Введите {showNextButton ? 'номер телефона' : 'проверочный код'} для входа в личный кабинет</p>

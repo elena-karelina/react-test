@@ -1,3 +1,7 @@
+:export {
+  primary: var(--button);
+}
+
 .wrapper {
   width: 30%;
 }
@@ -8,7 +12,7 @@
 }
 
 .button {
-  background-color: #1975ff;
+  background-color: var(--button);
   color: white;
   border: none;
   border-radius: 16px;
