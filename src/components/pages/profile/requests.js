@@ -15,19 +15,19 @@ export const getData = async (token) => {
   }
 };
 
-export const patchData = async (token, phoneNumber, firstName, middleName, lastName, email, city, unavtorise) => {
+export const patchData = async (token, data, unavtorise) => {
   axios
     .patch(
       'https://shift-backend.onrender.com/users/profile',
       {
         profile: {
-          firstname: firstName,
-          middlename: middleName,
-          lastname: lastName,
-          email: email,
-          city: city,
+          firstname: data.firstname,
+          middlename: data.middlename,
+          lastname: data.lastname,
+          email: data.email,
+          city: data.city,
         },
-        phone: phoneNumber,
+        phone: data.phone,
       },
       {
         headers: {

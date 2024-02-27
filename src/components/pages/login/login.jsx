@@ -26,18 +26,6 @@ export const Login = () => {
     console.log(JSON.stringify(data));
   };
 
-  // const handlePhoneNumberChange = (e) => {
-  //   let newValue = e.target.value;
-  //   // newValue = newValue.replace(/[^0-9]/g, '');
-  //   setPhoneNumber(e.target.value);
-  // };
-
-  // const handleOtpCodeChange = (e) => {
-  //   let newValue = e.target.value;
-  //   newValue = newValue.replace(/[^0-9]/g, '');
-  //   setOtpCode(newValue);
-  // };
-
   const handleNextButtonClick = () => {
     if (!phoneNumber) {
       return;
@@ -61,7 +49,7 @@ export const Login = () => {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          handleSubmit(onSubmit)(e);
+          handleSubmit(onSubmit);
         }}
       >
         <p>Введите {showNextButton ? 'номер телефона' : 'проверочный код'} для входа в личный кабинет</p>
@@ -75,14 +63,12 @@ export const Login = () => {
           })}
           placeholder='Телефон'
           className={`${styles.block} ${styles.input}`}
-          // required
           value={phoneNumber}
           onChange={(e) => {
             setPhoneNumber(e.target.value);
           }}
-          // title='Только цифры разрешены'
         />
-        <div>{errors?.phone && <span>{errors?.phone?.message || 'Error!'}</span>}</div>
+        <div className='errors'>{errors?.phone && <span>{errors?.phone?.message || 'Error!'}</span>}</div>
         {showVerificationInput && (
           <>
             <input
@@ -108,7 +94,7 @@ export const Login = () => {
                 setOtpCode(e.target.value);
               }}
             />
-            <div>{errors?.code && <span>{errors?.code?.message || 'Error!'}</span>}</div>
+            <div className='errors'>{errors?.code && <span>{errors?.code?.message || 'Error!'}</span>}</div>
           </>
         )}
         {showNextButton ? (

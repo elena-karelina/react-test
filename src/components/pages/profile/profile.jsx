@@ -1,19 +1,35 @@
 import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { getData, logOut, patchData } from './requests';
 import styles from './profile.module.css';
+import '../../style/style.css';
 
 export const Profile = () => {
   const token = localStorage.getItem('token');
   const navigate = useNavigate();
-  let userData = null;
+  let userData = {
+    firstname: '',
+    middlename: '',
+    lastname: '',
+    email: '',
+    city: '',
+    phone: '',
+  };
+  const [data, setData] = useState(userData);
   const [isLoading, setIsLoading] = useState(true);
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [middleName, setMiddleName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
-  const [city, setCity] = useState('');
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+  } = useForm({
+    mode: 'onBlur',
+  });
+
+  const onSubmit = (data) => {
+    console.log(JSON.stringify(data));
+    patchData(token, data, () => navigate('/'));
+  };
 
   const fetchData = async () => {
     try {
@@ -21,12 +37,14 @@ export const Profile = () => {
         userData = await getData(token);
         console.log(userData, token);
         if (userData) {
-          setPhoneNumber(userData.phone || '');
-          setFirstName(userData.firstname || '');
-          setMiddleName(userData.middlename || '');
-          setLastName(userData.lastname || '');
-          setEmail(userData.email || '');
-          setCity(userData.city || '');
+          setData({
+            firstname: userData.firstname || '',
+            middlename: userData.middlename || '',
+            lastname: userData.lastname || '',
+            email: userData.email || '',
+            city: userData.city || '',
+            phone: userData.phone,
+          });
           setIsLoading(false);
         }
         console.log(userData.phone);
@@ -51,20 +69,52 @@ export const Profile = () => {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          patchData(token, phoneNumber, firstName, middleName, lastName, email, city, () => navigate('/'));
+          handleSubmit(onSubmit)(e);
         }}
       >
         <input
-          placeholder='Телефон'
-          value={phoneNumber}
-          required
-          onChange={(e) => setPhoneNumber(e.target.value)}
+          {...register('phone', {
+            required: 'Поле обязательно к заполнению',
+            pattern: {
+              value: /^[0-9]*$/,
+              message: 'Введите только цифры',
+            },
+          })}
+          value={data.phone}
+          onChange={(e) => setData({ ...data, phone: e.target.value })}
         ></input>
-        <input placeholder='Фамилия' value={lastName} onChange={(e) => setLastName(e.target.value)}></input>
-        <input placeholder='Имя' value={firstName} onChange={(e) => setFirstName(e.target.value)}></input>
-        <input placeholder='Отчество' value={middleName} onChange={(e) => setMiddleName(e.target.value)}></input>
-        <input placeholder='Почта' value={email} type='email' onChange={(e) => setEmail(e.target.value)}></input>
-        <input placeholder='Город' value={city} onChange={(e) => setCity(e.target.value)}></input>
+        <div className='errors'>{errors?.phone && <span>{errors?.phone?.message || 'Error!'}</span>}</div>
+        <input
+          {...register('lastname')}
+          placeholder='Фамилия'
+          value={data.lastname}
+          onChange={(e) => setData({ ...data, lastname: e.target.value })}
+        ></input>
+        <input
+          {...register('firstname')}
+          placeholder='Имя'
+          value={data.firstname}
+          onChange={(e) => setData({ ...data, firstname: e.target.value })}
+        ></input>
+        <input
+          {...register('middlename')}
+          placeholder='Отчество'
+          value={data.middlename}
+          onChange={(e) => setData({ ...data, middlename: e.target.value })}
+        ></input>
+        <input
+          {...register('email')}
+          placeholder='Почта'
+          value={data.email}
+          type='email'
+          onChange={(e) => setData({ ...data, email: e.target.value })}
+        ></input>
+        <input
+          {...register('city')}
+          placeholder='Город'
+          value={data.city}
+          onChange={(e) => setData({ ...data, city: e.target.value })}
+        ></input>
         <button type='submit'>Сохранить</button>
       </form>
       <button className={styles.logout} onClick={() => logOut(() => navigate('/'))} type='button'>

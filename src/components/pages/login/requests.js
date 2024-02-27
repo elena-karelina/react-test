@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export const GetOtpCode = (phoneNumber, setRetryDelay, setShowTextTimer) => {
-  console.log({ phoneNumber });
+  console.log(phoneNumber);
   axios
     .post('https://shift-backend.onrender.com/auth/otp', {
       phone: phoneNumber,
@@ -10,7 +10,7 @@ export const GetOtpCode = (phoneNumber, setRetryDelay, setShowTextTimer) => {
       console.log(response);
       const { success, retryDelay } = response.data;
       if (success) {
-        const delay = retryDelay / 1000;
+        const delay = Math.ceil(retryDelay / 1000);
         setRetryDelay(delay);
         setShowTextTimer(true);
       }
