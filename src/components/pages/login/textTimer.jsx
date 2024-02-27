@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import { RequestCode } from './requestCode';
 import { GetOtpCode } from './requests';
 import styles from './login.module.css';
 
-export const TextTimer = (initValue, phoneNumber, setRetryDelay, setShowTextTimer) => {
+export const TextTimer = ({ initValue, phoneNumber, setRetryDelay, setShowTextTimer }) => {
   const [seconds, setSeconds] = useState(initValue);
 
   const onRequestCodeClick = () => {
@@ -35,4 +36,11 @@ export const TextTimer = (initValue, phoneNumber, setRetryDelay, setShowTextTime
         }}
       />
     );
+};
+
+TextTimer.propTypes = {
+  initValue: PropTypes.number.isRequired,
+  phoneNumber: PropTypes.string.isRequired,
+  setRetryDelay: PropTypes.func.isRequired,
+  setShowTextTimer: PropTypes.func.isRequired,
 };

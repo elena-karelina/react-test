@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getData, PatchData } from './requests';
+import { getData, logOut, patchData } from './requests';
 import styles from './profile.module.css';
 
 export const Profile = () => {
@@ -16,20 +16,25 @@ export const Profile = () => {
   const [city, setCity] = useState('');
 
   const fetchData = async () => {
-    if (token) {
-      userData = await getData(token);
-      console.log(userData, token);
-      if (userData) {
-        setPhoneNumber(userData.phone || '');
-        setFirstName(userData.firstname || '');
-        setMiddleName(userData.middlename || '');
-        setLastName(userData.lastname || '');
-        setEmail(userData.email || '');
-        setCity(userData.city || '');
-        setIsLoading(false);
+    try {
+      if (token) {
+        userData = await getData(token);
+        console.log(userData, token);
+        if (userData) {
+          setPhoneNumber(userData.phone || '');
+          setFirstName(userData.firstname || '');
+          setMiddleName(userData.middlename || '');
+          setLastName(userData.lastname || '');
+          setEmail(userData.email || '');
+          setCity(userData.city || '');
+          setIsLoading(false);
+        }
+        console.log(userData.phone);
+      } else {
+        navigate('/');
       }
-    } else {
-      navigate('/');
+    } catch (error) {
+      console.error('Error fetching data:', error);
     }
   };
 
@@ -46,7 +51,7 @@ export const Profile = () => {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          PatchData(token, phoneNumber, firstName, middleName, lastName, email, city);
+          patchData(token, phoneNumber, firstName, middleName, lastName, email, city, () => navigate('/'));
         }}
       >
         <input
@@ -62,7 +67,9 @@ export const Profile = () => {
         <input placeholder='Город' value={city} onChange={(e) => setCity(e.target.value)}></input>
         <button type='submit'>Сохранить</button>
       </form>
-      <button className={styles.logout}>Выйти</button>
+      <button className={styles.logout} onClick={() => logOut(() => navigate('/'))} type='button'>
+        Выйти
+      </button>
     </div>
   );
 };

@@ -7,24 +7,12 @@ import { Profile } from './components/pages/profile/profile';
 function App() {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route
-          path='/'
-          element={
-            <Layout>
-              <Login />
-            </Layout>
-          }
-        />
-        <Route
-          path='/profile'
-          element={
-            <Layout>
-              <Profile />
-            </Layout>
-          }
-        />
-      </Routes>
+      <Layout>
+        <Routes>
+          <Route path='/' element={<Login />} />
+          <Route path='/profile' element={<Profile />} />
+        </Routes>
+      </Layout>
     </BrowserRouter>
   );
 }

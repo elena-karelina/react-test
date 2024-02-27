@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
 import { NextButton } from './button';
 import { TextTimer } from './textTimer';
 import { GetOtpCode, SignIn } from './requests';
@@ -11,17 +13,30 @@ export const Login = () => {
   const [showTextTimer, setShowTextTimer] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState('');
   const [retryDelay, setRetryDelay] = useState(0);
+  const navigate = useNavigate();
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+  } = useForm({
+    mode: 'onBlur',
+  });
 
-  const handlePhoneNumberChange = (e) => {
-    let newValue = e.target.value;
-    newValue = newValue.replace(/[^0-9]/g, '');
-    setPhoneNumber(newValue);
+  const onSubmit = (data) => {
+    console.log(JSON.stringify(data));
   };
-  const handleOtpCodeChange = (e) => {
-    let newValue = e.target.value;
-    newValue = newValue.replace(/[^0-9]/g, '');
-    setOtpCode(newValue);
-  };
+
+  // const handlePhoneNumberChange = (e) => {
+  //   let newValue = e.target.value;
+  //   // newValue = newValue.replace(/[^0-9]/g, '');
+  //   setPhoneNumber(e.target.value);
+  // };
+
+  // const handleOtpCodeChange = (e) => {
+  //   let newValue = e.target.value;
+  //   newValue = newValue.replace(/[^0-9]/g, '');
+  //   setOtpCode(newValue);
+  // };
 
   const handleNextButtonClick = () => {
     if (!phoneNumber) {
@@ -37,7 +52,7 @@ export const Login = () => {
       return;
     }
 
-    SignIn(phoneNumber, otpCode);
+    SignIn(phoneNumber, otpCode, () => navigate('/profile'));
   };
 
   return (
@@ -46,27 +61,55 @@ export const Login = () => {
       <form
         onSubmit={(e) => {
           e.preventDefault();
+          handleSubmit(onSubmit)(e);
         }}
       >
         <p>Введите {showNextButton ? 'номер телефона' : 'проверочный код'} для входа в личный кабинет</p>
         <input
+          {...register('phone', {
+            required: 'Поле обязательно к заполнению',
+            pattern: {
+              value: /^[0-9]*$/,
+              message: 'Введите только цифры',
+            },
+          })}
           placeholder='Телефон'
           className={`${styles.block} ${styles.input}`}
-          required
+          // required
           value={phoneNumber}
-          onChange={handlePhoneNumberChange}
-          title='Только цифры разрешены'
+          onChange={(e) => {
+            setPhoneNumber(e.target.value);
+          }}
+          // title='Только цифры разрешены'
         />
+        <div>{errors?.phone && <span>{errors?.phone?.message || 'Error!'}</span>}</div>
         {showVerificationInput && (
-          <input
-            placeholder='Проверочный код'
-            required
-            className={`${styles.block} ${styles.input}`}
-            value={otpCode}
-            minLength={6}
-            maxLength={6}
-            onChange={handleOtpCodeChange}
-          />
+          <>
+            <input
+              {...register('code', {
+                required: 'Поле обязательно к заполнению',
+                pattern: {
+                  value: /^[0-9]*$/,
+                  message: 'Введите только цифры',
+                },
+                minLength: {
+                  value: 6,
+                  message: 'Введите код из 6 символов',
+                },
+                maxLength: {
+                  value: 6,
+                  message: 'Введите код из 6 символов',
+                },
+              })}
+              placeholder='Проверочный код'
+              className={`${styles.block} ${styles.input}`}
+              value={otpCode}
+              onChange={(e) => {
+                setOtpCode(e.target.value);
+              }}
+            />
+            <div>{errors?.code && <span>{errors?.code?.message || 'Error!'}</span>}</div>
+          </>
         )}
         {showNextButton ? (
           <NextButton onClick={() => handleNextButtonClick()}>Продолжить</NextButton>
