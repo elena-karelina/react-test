@@ -25,6 +25,11 @@ export const Login = () => {
 
   const onSubmit = (data) => {
     console.log(JSON.stringify(data));
+    if (showNextButton) {
+      handleNextButtonClick();
+    } else {
+      handleLoginButtonClick();
+    }
   };
 
   const handleNextButtonClick = () => {
@@ -37,7 +42,7 @@ export const Login = () => {
   };
 
   const handleLoginButtonClick = () => {
-    if (!phoneNumber || !otpCode.trim) {
+    if (!phoneNumber || !otpCode) {
       return;
     }
 
@@ -49,7 +54,7 @@ export const Login = () => {
       <h1>Вход</h1>
       <form
         onSubmit={(e) => {
-          e.preventDefault();
+          // e.preventDefault();
           handleSubmit(onSubmit)(e);
         }}
       >
@@ -98,11 +103,7 @@ export const Login = () => {
             <div className='errors'>{errors?.code && <span>{errors?.code?.message || 'Error!'}</span>}</div>
           </>
         )}
-        {showNextButton ? (
-          <NextButton onClick={() => handleNextButtonClick()}>Продолжить</NextButton>
-        ) : (
-          <NextButton onClick={() => handleLoginButtonClick()}>Войти</NextButton>
-        )}
+        {showNextButton ? <NextButton>Продолжить</NextButton> : <NextButton>Войти</NextButton>}
       </form>
       {showTextTimer && (
         <TextTimer

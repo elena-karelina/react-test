@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import styles from './login.module.css';
 
-export const NextButton = ({ onClick, children }) => (
-  <button className={`${styles.block} ${styles.button}`} onClick={onClick} type='submit'>
+export const NextButton = ({ children }) => (
+  <button className={`${styles.block} ${styles.button}`} type='submit'>
     {children}
   </button>
 );
