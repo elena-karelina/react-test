@@ -1,8 +1,10 @@
 import axios from 'axios';
 
+const apiUrl = import.meta.env.VITE_BACK_URL;
+
 export const getData = async (token) => {
   try {
-    const response = await axios.get('https://shift-backend.onrender.com/users/session', {
+    const response = await axios.get(`${apiUrl}/users/session`, {
       headers: {
         accept: 'application/json',
         Authorization: `Bearer ${token}`,
@@ -18,7 +20,7 @@ export const getData = async (token) => {
 export const patchData = async (token, data, unavtorise) => {
   axios
     .patch(
-      'https://shift-backend.onrender.com/users/profile',
+      `${apiUrl}/users/profile`,
       {
         profile: {
           firstname: data.firstname,

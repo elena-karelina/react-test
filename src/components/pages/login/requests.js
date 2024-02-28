@@ -1,9 +1,11 @@
 import axios from 'axios';
 
+const apiUrl = import.meta.env.VITE_BACK_URL;
+
 export const GetOtpCode = (phoneNumber, setRetryDelay, setShowTextTimer) => {
   console.log(phoneNumber);
   axios
-    .post('https://shift-backend.onrender.com/auth/otp', {
+    .post(`${apiUrl}/auth/otp`, {
       phone: phoneNumber,
     })
     .then((response) => {
@@ -19,7 +21,7 @@ export const GetOtpCode = (phoneNumber, setRetryDelay, setShowTextTimer) => {
 
 export const SignIn = (phoneNumber, otpCode, signIn) => {
   axios
-    .post('https://shift-backend.onrender.com/users/signin', {
+    .post(`${apiUrl}/users/signin`, {
       phone: phoneNumber,
       code: otpCode,
     })
