@@ -1,8 +1,7 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { Layout } from './components/layout/Layout';
-
-import { Login } from './components/pages/login/login';
-import { Profile } from './components/pages/profile/profile';
+import { Layout } from './app/layout/Layout';
+import { Profile } from './pages/profile/profile';
+import { Login } from './pages/login/login';
 
 function App() {
   return (

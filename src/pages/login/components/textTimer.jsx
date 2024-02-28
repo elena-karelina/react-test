@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { RequestCode } from './requestCode';
-import { GetOtpCode } from './requests';
-import styles from './login.module.css';
+import { GetOtpCode } from '../../../shared/api/requests/login/requests';
+import styles from '../login.module.css';
 
 export const TextTimer = ({ initValue, phoneNumber, setRetryDelay, setShowTextTimer }) => {
   const [seconds, setSeconds] = useState(initValue);

@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { getData, logOut, patchData } from './requests';
+import { getData, logOut, patchData } from '../../shared/api/requests/profile/requests';
 import styles from './profile.module.css';
-import '../../style/style.css';
+import '../../app/style/style.css';
 
 export const Profile = () => {
   const token = localStorage.getItem('token');

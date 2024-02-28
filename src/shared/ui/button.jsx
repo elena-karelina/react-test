@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import styles from './login.module.css';
+import styles from '../../pages/login/login.module.css';
 
 export const NextButton = ({ children }) => (
   <button className={`${styles.block} ${styles.button}`} type='submit'>

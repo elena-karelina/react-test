@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { NextButton } from './button';
-import { TextTimer } from './textTimer';
-import { GetOtpCode, SignIn } from './requests';
+import { NextButton } from '../../shared/ui/button';
+import { TextTimer } from './components/textTimer';
+import { GetOtpCode, SignIn } from '../../shared/api/requests/login/requests';
 import styles from './login.module.css';
-import '../../style/style.css';
+import '../../app/style/style.css';
 
 export const Login = () => {
   const [showNextButton, setShowNextButton] = useState(true);

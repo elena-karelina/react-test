@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import styles from './login.module.css';
+import styles from '../login.module.css';
 
 export const RequestCode = ({ onClick }) => (
   <p onClick={onClick} className={styles.request_code_text}>
