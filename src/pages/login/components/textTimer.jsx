@@ -1,7 +1,9 @@
-import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { useEffect, useState } from 'react';
+
 import { RequestCode } from './requestCode';
-import { GetOtpCode } from '../../../shared/api/requests/login/requests';
+
+import { getOtpCode } from '../../../shared/api/requests/login/getOtpCode';
 import styles from '../login.module.css';
 
 export const TextTimer = ({ initValue, phoneNumber, setRetryDelay, setShowTextTimer }) => {
@@ -9,7 +11,7 @@ export const TextTimer = ({ initValue, phoneNumber, setRetryDelay, setShowTextTi
 
   const onRequestCodeClick = () => {
     setSeconds(initValue);
-    GetOtpCode(phoneNumber, setRetryDelay, setShowTextTimer);
+    getOtpCode(phoneNumber, setRetryDelay, setShowTextTimer);
   };
 
   useEffect(() => {
@@ -28,14 +30,7 @@ export const TextTimer = ({ initValue, phoneNumber, setRetryDelay, setShowTextTi
         Запросить код повторно можно через <span>{seconds}</span> секунд
       </p>
     );
-  else
-    return (
-      <RequestCode
-        onClick={() => {
-          onRequestCodeClick();
-        }}
-      />
-    );
+  else return <RequestCode onClick={onRequestCodeClick} />;
 };
 
 TextTimer.propTypes = {

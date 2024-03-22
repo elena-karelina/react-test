@@ -1,53 +1,59 @@
+import { profileValidationSchema } from '@constants/validationSchemas';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { getData } from '@requests/profile/getData';
+import { logOut } from '@requests/profile/logout';
+import { patchData } from '@requests/profile/patchData';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { getData, logOut, patchData } from '../../shared/api/requests/profile/requests';
+
 import styles from './profile.module.css';
-import '../../app/style/style.css';
+import '@style/style.css';
 
 export const Profile = () => {
   const token = localStorage.getItem('token');
   const navigate = useNavigate();
-  let userData = {
-    firstname: '',
-    middlename: '',
-    lastname: '',
-    email: '',
-    city: '',
-    phone: '',
-  };
-  const [data, setData] = useState(userData);
+  const [data, setData] = useState();
+
   const [isLoading, setIsLoading] = useState(true);
   const {
     register,
     formState: { errors },
     handleSubmit,
+    setValue,
   } = useForm({
+    resolver: yupResolver(profileValidationSchema),
     mode: 'onBlur',
   });
 
+  const handlPatchData = (data) => {
+    patchData(token, data)
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => {
+        if (error.response && error.response.status === 401) {
+          alert(error.message);
+          navigate('/');
+        } else {
+          alert(error.message);
+        }
+      });
+  };
+
   const onSubmit = (data) => {
     console.log(JSON.stringify(data));
-    patchData(token, data, () => navigate('/'));
+    handlPatchData(data);
   };
 
   const fetchData = async () => {
     try {
       if (token) {
-        userData = await getData(token);
-        console.log(userData, token);
-        if (userData) {
-          setData({
-            firstname: userData.firstname || '',
-            middlename: userData.middlename || '',
-            lastname: userData.lastname || '',
-            email: userData.email || '',
-            city: userData.city || '',
-            phone: userData.phone,
-          });
+        const profileData = await getData(token);
+        if (profileData) {
+          setData(profileData);
           setIsLoading(false);
         }
-        console.log(userData.phone);
       } else {
         navigate('/');
       }
@@ -60,61 +66,27 @@ export const Profile = () => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    if (data) {
+      Object.keys(data).forEach((key) => setValue(key, data[key]));
+    }
+  }, [data, setValue]);
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
 
   return (
     <div className={styles.wrapper}>
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          handleSubmit(onSubmit)(e);
-        }}
-      >
-        <input
-          {...register('phone', {
-            required: 'Поле обязательно к заполнению',
-            pattern: {
-              value: /^[0-9]*$/,
-              message: 'Введите только цифры',
-            },
-          })}
-          value={data.phone}
-          onChange={(e) => setData({ ...data, phone: e.target.value })}
-        ></input>
-        <div className='errors'>{errors?.phone && <span>{errors?.phone?.message || 'Error!'}</span>}</div>
-        <input
-          {...register('lastname')}
-          placeholder='Фамилия'
-          value={data.lastname}
-          onChange={(e) => setData({ ...data, lastname: e.target.value })}
-        ></input>
-        <input
-          {...register('firstname')}
-          placeholder='Имя'
-          value={data.firstname}
-          onChange={(e) => setData({ ...data, firstname: e.target.value })}
-        ></input>
-        <input
-          {...register('middlename')}
-          placeholder='Отчество'
-          value={data.middlename}
-          onChange={(e) => setData({ ...data, middlename: e.target.value })}
-        ></input>
-        <input
-          {...register('email')}
-          placeholder='Почта'
-          value={data.email}
-          type='email'
-          onChange={(e) => setData({ ...data, email: e.target.value })}
-        ></input>
-        <input
-          {...register('city')}
-          placeholder='Город'
-          value={data.city}
-          onChange={(e) => setData({ ...data, city: e.target.value })}
-        ></input>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <input {...register('phone')} />
+        {errors?.phone && <div className='errors'>{errors?.phone?.message || 'Error!'}</div>}
+        <input {...register('lastname')} placeholder='Фамилия' />
+        <input {...register('firstname')} placeholder='Имя' />
+        <input {...register('middlename')} placeholder='Отчество' />
+        <input {...register('email')} placeholder='Почта' />
+        {errors?.email && <div className='errors'>{errors?.email?.message || 'Error!'}</div>}
+        <input {...register('city')} placeholder='Город' />
         <button type='submit'>Сохранить</button>
       </form>
       <button className={styles.logout} onClick={() => logOut(() => navigate('/'))} type='button'>

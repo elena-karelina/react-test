@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+
 import styles from '../../pages/login/login.module.css';
 
 export const NextButton = ({ children }) => (
@@ -8,6 +9,5 @@ export const NextButton = ({ children }) => (
 );
 
 NextButton.propTypes = {
-  onClick: PropTypes.func.isRequired,
   children: PropTypes.node.isRequired,
 };

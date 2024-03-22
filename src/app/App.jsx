@@ -1,7 +1,9 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { Layout } from './app/layout/Layout';
-import { Profile } from './pages/profile/profile';
-import { Login } from './pages/login/login';
+
+import { Layout } from './layout/Layout';
+
+import { Login } from '../pages/login/login';
+import { Profile } from '../pages/profile/profile';
 
 function App() {
   return (

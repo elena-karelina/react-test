@@ -1,10 +1,11 @@
 import PropTypes from 'prop-types';
+
 import styles from '../login.module.css';
 
 export const RequestCode = ({ onClick }) => (
-  <p onClick={onClick} className={styles.request_code_text}>
+  <button onClick={onClick} className={styles.request_code_text}>
     Запросить код еще раз
-  </p>
+  </button>
 );
 
 RequestCode.propTypes = {
