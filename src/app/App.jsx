@@ -12,14 +12,4 @@ export const router = createBrowserRouter([
     path: '/profile',
     element: <Profile />,
   },
-  // return (
-  //   <BrowserRouter>
-  //     <Layout>
-  //       <Routes>
-  //         <Route path='/' element={<Login />} />
-  //         <Route path='/profile' element={<Profile />} />
-  //       </Routes>
-  //     </Layout>
-  //   </BrowserRouter>
-  // );
 ]);
