@@ -16,10 +16,12 @@
     }
   },
   "lint-staged": {
-    "*.jsx": [
+    "*.{js,jsx}": [
       "npm run lint:fix",
       "git add"
-    ]
+    ],
+    "*.js": "npm run lint:fix",
+    "*.jsx": "npm run lint:fix"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
