@@ -6,6 +6,7 @@ import { NextButton } from '../../shared/ui/button';
 import '@style/style.css';
 
 export const Login = () => {
+  const name = ds;
   const {
     showNextButton,
     showVerificationInput,
