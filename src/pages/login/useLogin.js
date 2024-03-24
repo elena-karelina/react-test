@@ -48,6 +48,7 @@ const useLogin = () => {
       .then((response) => {
         const token = response.data.token;
         localStorage.setItem('token', token);
+        console.log(token);
         navigate('/profile');
       })
       .catch((error) => {
