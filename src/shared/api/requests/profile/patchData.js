@@ -1,24 +1,15 @@
-import axios from 'axios';
+import instance from '../axiosInstance';
 
-const apiUrl = import.meta.env.VITE_BACK_URL;
+const patchData = async (data) =>
+  instance.patch('users/profile', {
+    profile: {
+      firstname: data.firstname,
+      middlename: data.middlename,
+      lastname: data.lastname,
+      email: data.email,
+      city: data.city,
+    },
+    phone: data.phone,
+  });
 
-export const patchData = async (token, data) => {
-  return axios.patch(
-    `${apiUrl}/users/profile`,
-    {
-      profile: {
-        firstname: data.firstname,
-        middlename: data.middlename,
-        lastname: data.lastname,
-        email: data.email,
-        city: data.city,
-      },
-      phone: data.phone,
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    },
-  );
-};
+export default patchData;

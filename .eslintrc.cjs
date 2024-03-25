@@ -1,28 +1,39 @@
 module.exports = {
-  root: true,
-  env: { browser: true, es2020: true },
-  extends: [
-    'eslint:recommended',
-    'plugin:react/recommended',
-    'plugin:react/jsx-runtime',
-    'plugin:react-hooks/recommended',
+  env: {
+    browser: true,
+    es2021: true,
+  },
+  extends: 'airbnb',
+  overrides: [
+    {
+      env: {
+        node: true,
+      },
+      files: ['.eslintrc.{js,cjs}'],
+      parserOptions: {
+        sourceType: 'script',
+      },
+    },
   ],
-  ignorePatterns: ['dist', '.eslintrc.cjs'],
-  parserOptions: { ecmaVersion: 'latest', sourceType: 'module' },
-  settings: { react: { version: '18.2' } },
-  plugins: ['react-refresh', 'import'],
+  parserOptions: {
+    ecmaVersion: 'latest',
+    sourceType: 'module',
+  },
   rules: {
-    'react/jsx-no-target-blank': 'off',
-    'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
-    'import/order': [
-      2,
+    'react/jsx-props-no-spreading': 'off',
+    'implicit-arrow-linebreak': 'off',
+    'object-curly-newline': 'off',
+    'react/react-in-jsx-scope': 'off',
+    'jsx-quotes': 'off',
+    'react/button-has-type': 'off',
+    'jsx-a11y/click-events-have-key-events': 'off',
+    'jsx-a11y/no-noninteractive-element-interactions': 'off',
+    'linebreak-style': 'off',
+    'react/prop-types': 'off',
+    'import/no-unresolved': [
+      'error',
       {
-        groups: ['external', 'builtin', 'index', 'sibling', 'parent', 'internal', 'type'],
-        alphabetize: {
-          order: 'asc',
-          caseInsensitive: true,
-        },
-        'newlines-between': 'always-and-inside-groups',
+        ignore: ['@components', '@constants', '@style', '@requests'],
       },
     ],
   },

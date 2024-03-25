@@ -1,10 +1,10 @@
 import { createRoot } from 'react-dom/client';
 
-import './index.css';
+import './assets/styles/global.css';
 import { RouterProvider } from 'react-router-dom';
 
-import { router } from './app/App';
-import { Layout } from './app/layout/Layout';
+import router from './App';
+import Layout from './components/layout/layout';
 
 createRoot(document.getElementById('root')).render(
   <Layout>

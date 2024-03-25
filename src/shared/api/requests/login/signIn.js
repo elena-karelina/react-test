@@ -1,10 +1,9 @@
-import axios from 'axios';
+import instance from '../axiosInstance';
 
-const apiUrl = import.meta.env.VITE_BACK_URL;
-
-export const signIn = (phone, code) => {
-  return axios.post(`${apiUrl}/users/signin`, {
+const signIn = (phone, code) =>
+  instance.post('users/signin', {
     phone,
     code,
   });
-};
+
+export default signIn;

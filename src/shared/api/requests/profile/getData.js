@@ -1,16 +1,5 @@
-import axios from 'axios';
+import instance from '../axiosInstance';
 
-const apiUrl = import.meta.env.VITE_BACK_URL;
+const getData = async () => instance.get('users/session');
 
-export const getData = async (token) => {
-  try {
-    const response = await axios.get(`${apiUrl}/users/session`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return response.data.user;
-  } catch (error) {
-    alert(error.message);
-  }
-};
+export default getData;

@@ -1,9 +1,8 @@
-import axios from 'axios';
+import instance from '../axiosInstance';
 
-const apiUrl = import.meta.env.VITE_BACK_URL;
-
-export const getOtpCode = (phone) => {
-  return axios.post(`${apiUrl}/auth/otp`, {
+const getOtpCode = (phone) =>
+  instance.post('auth/otp', {
     phone,
   });
-};
+
+export default getOtpCode;

@@ -1,11 +1,10 @@
-import { TextTimer } from './components/textTimer';
+import Button from '@components/ui/button/button';
+import Input from '@components/ui/input/input';
+import TextTimer from './components/textTimer';
 import styles from './login.module.css';
 import useLogin from './useLogin';
 
-import { NextButton } from '../../shared/ui/button';
-import '@style/style.css';
-
-export const Login = () => {
+function Login() {
   const {
     showNextButton,
     showVerificationInput,
@@ -25,16 +24,16 @@ export const Login = () => {
     <div className={`${styles.wrapper}`}>
       <h1>Вход</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <p>Введите {showNextButton ? 'номер телефона' : 'проверочный код'} для входа в личный кабинет</p>
-        <input {...register('phone')} placeholder='Телефон' className={`${styles.block} ${styles.input}`} />
-        {errors?.phone && <div className='errors'>{errors?.phone?.message || 'Error!'}</div>}
+        <p>
+          Введите
+          {showNextButton ? 'номер телефона' : 'проверочный код'}
+          для входа в личный кабинет
+        </p>
+        <Input register={register} name='phone' placeholder='Телефон' errors={errors} />
         {showVerificationInput && (
-          <>
-            <input {...register('code')} placeholder='Проверочный код' className={`${styles.block} ${styles.input}`} />
-            {errors?.code && <div className='errors'>{errors?.code?.message || 'Error!'}</div>}
-          </>
+          <Input register={register} name='code' placeholder='Проверочный код' errors={errors} />
         )}
-        <NextButton>{showNextButton ? 'Продолжить' : 'Войти'}</NextButton>
+        <Button type='submit'>{showNextButton ? 'Продолжить' : 'Войти'}</Button>
       </form>
       {showTextTimer && (
         <TextTimer
@@ -46,4 +45,6 @@ export const Login = () => {
       )}
     </div>
   );
-};
+}
+
+export default Login;

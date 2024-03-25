@@ -1,7 +1,7 @@
 import { loginConditionalValidationSchema } from '@constants/validationSchemas';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { getOtpCode } from '@requests/login/getOtpCode';
-import { signIn } from '@requests/login/signIn';
+import getOtpCode from '@requests/login/getOtpCode';
+import signIn from '@requests/login/signIn';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
@@ -23,22 +23,12 @@ const useLogin = () => {
     mode: 'onBlur',
   });
 
-  const onSubmit = (data) => {
-    const { phone, code } = data;
-    console.log(JSON.stringify(data));
-    if (showNextButton) {
-      handleNextButtonClick(phone);
-    } else {
-      handleLoginButtonClick(phone, code);
-    }
-  };
-
   const handleGetOtpCode = (phone) => {
     getOtpCode(phone).then((res) => {
-      const { success, retryDelay } = res.data;
+      const { success, delay } = res.data.retryDelay;
       if (success) {
-        const delay = Math.ceil(retryDelay / 1000);
-        setRetryDelay(delay);
+        const del = Math.ceil(delay / 1000);
+        setRetryDelay(del);
         setShowTextTimer(true);
       }
     });
@@ -46,15 +36,13 @@ const useLogin = () => {
   const handleSignIn = (phone, code) => {
     signIn(phone, code)
       .then((response) => {
-        const token = response.data.token;
+        const { token } = response.data;
         localStorage.setItem('token', token);
-        console.log(token);
         navigate('/profile');
       })
       .catch((error) => {
         if (error.response) {
-          console.log(error.message);
-          alert('Ошибка: ' + error.message);
+          alert(`Ошибка: ${error.message}`);
         }
       });
   };
@@ -75,6 +63,15 @@ const useLogin = () => {
     }
 
     handleSignIn(phone, code);
+  };
+
+  const onSubmit = (data) => {
+    const { phone, code } = data;
+    if (showNextButton) {
+      handleNextButtonClick(phone);
+    } else {
+      handleLoginButtonClick(phone, code);
+    }
   };
 
   return {

@@ -1,19 +1,19 @@
+import Button from '@components/ui/button/button';
+import Input from '@components/ui/input/input';
+import Isloading from '@components/ui/isLoading';
 import { profileValidationSchema } from '@constants/validationSchemas';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { getData } from '@requests/profile/getData';
-import { logOut } from '@requests/profile/logout';
-import { patchData } from '@requests/profile/patchData';
+import getData from '@requests/profile/getData';
+import patchData from '@requests/profile/patchData';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
 import styles from './profile.module.css';
-import '@style/style.css';
 
-export const Profile = () => {
-  const token = localStorage.getItem('token');
+function Profile() {
   const navigate = useNavigate();
-  const [data, setData] = useState();
+  const [userData, setUserData] = useState();
 
   const [isLoading, setIsLoading] = useState(true);
   const {
@@ -26,39 +26,33 @@ export const Profile = () => {
     mode: 'onBlur',
   });
 
+  const logOut = () => {
+    localStorage.removeItem('token');
+    navigate('/');
+  };
+
   const handlPatchData = (data) => {
-    patchData(token, data)
-      .then((response) => {
-        console.log(response.data);
-      })
-      .catch((error) => {
-        if (error.response && error.response.status === 401) {
-          alert(error.message);
-          navigate('/');
-        } else {
-          alert(error.message);
-        }
-      });
+    patchData(data).catch((error) => {
+      if (error.response && error.response.status === 401) {
+        alert(error.message);
+        logOut();
+      } else {
+        alert(error.message);
+      }
+    });
   };
 
   const onSubmit = (data) => {
-    console.log(JSON.stringify(data));
     handlPatchData(data);
   };
 
   const fetchData = async () => {
     try {
-      if (token) {
-        const profileData = await getData(token);
-        if (profileData) {
-          setData(profileData);
-          setIsLoading(false);
-        }
-      } else {
-        navigate('/');
-      }
+      const getProfileResponse = await getData();
+      setUserData(getProfileResponse.data.user);
+      setIsLoading(false);
     } catch (error) {
-      console.error('Error fetching data:', error);
+      alert(`Ошибка: ${error.message}`);
     }
   };
 
@@ -67,31 +61,31 @@ export const Profile = () => {
   }, []);
 
   useEffect(() => {
-    if (data) {
-      Object.keys(data).forEach((key) => setValue(key, data[key]));
+    if (userData) {
+      Object.keys(userData).forEach((key) => setValue(key, userData[key]));
     }
-  }, [data, setValue]);
+  }, [userData, setValue]);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <Isloading />;
   }
 
   return (
     <div className={styles.wrapper}>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <input {...register('phone')} />
-        {errors?.phone && <div className='errors'>{errors?.phone?.message || 'Error!'}</div>}
-        <input {...register('lastname')} placeholder='Фамилия' />
-        <input {...register('firstname')} placeholder='Имя' />
-        <input {...register('middlename')} placeholder='Отчество' />
-        <input {...register('email')} placeholder='Почта' />
-        {errors?.email && <div className='errors'>{errors?.email?.message || 'Error!'}</div>}
-        <input {...register('city')} placeholder='Город' />
-        <button type='submit'>Сохранить</button>
+        <Input register={register} name='phone' placeholder='Телефон' errors={errors} />
+        <Input register={register} name='lastname' placeholder='Фамилия' errors={errors} />
+        <Input register={register} name='firstname' placeholder='Имя' errors={errors} />
+        <Input register={register} name='middlename' placeholder='Отчество' errors={errors} />
+        <Input register={register} name='email' placeholder='Почта' errors={errors} />
+        <Input register={register} name='city' placeholder='Город' errors={errors} />
+        <Button type='submit'>Сохранить</Button>
       </form>
-      <button className={styles.logout} onClick={() => logOut(() => navigate('/'))} type='button'>
+      <Button type='button' variant='logout' onClick={logOut}>
         Выйти
-      </button>
+      </Button>
     </div>
   );
-};
+}
+
+export default Profile;

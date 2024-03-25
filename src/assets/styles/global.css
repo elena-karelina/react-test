@@ -1,3 +1,8 @@
+:root {
+  --button: #1975ff;
+  --logout_button: #515965;
+  --secondary: white;
+}
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans',
@@ -8,4 +13,13 @@ body {
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+.errors {
+  font-size: 14px;
+  color: red;
+  font-weight: 600;
+  margin-top: -10px;
+  margin-left: 5px;
+  margin-bottom: 10px;
 }
